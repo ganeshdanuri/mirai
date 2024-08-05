@@ -4,7 +4,7 @@ Thank you for considering contributing to the ATS Resume Maker project! We appre
 
 ## Reporting Issues
 
-- **Use the issue tracker:** For bugs, feature requests, or any other issues, please open an issue on the [GitHub repository](https://github.com/yourusername/ats-resume-maker/issues).
+- **Use the issue tracker:** For bugs, feature requests, or any other issues, please open an issue on the [GitHub repository](https://github.com/ganeshdanuri/mirai/issues).
 - **Be descriptive:** Clearly describe the problem, including steps to reproduce it if possible.
 - **Search for existing issues:** Check if the issue has already been reported before opening a new one.
 
