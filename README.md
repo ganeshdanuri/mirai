@@ -36,10 +36,6 @@ This is a React application built with Vite that helps you create ATS-friendly r
 
 We welcome contributions! See the `CONTRIBUTING.md` file for details on how to contribute.
 
-## License
-
-This project is licensed under the MIT License (see the `LICENSE` file for details).
-
 ## Contact
 
 - If you have any questions or feedback, feel free to create an issue on this repository.
