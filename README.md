@@ -34,7 +34,7 @@ This is a React application built with Vite that helps you create ATS-friendly r
 
 ## Contributing
 
-We welcome contributions! See the `CONTRIBUTING.md` file (if you choose to create one) for details on how to contribute.
+We welcome contributions! See the `CONTRIBUTING.md` file for details on how to contribute.
 
 ## License
 
