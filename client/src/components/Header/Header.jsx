@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Button, useDisclosure } from "@nextui-org/react";
+import { Button, useDisclosure, Link as NextLink } from "@nextui-org/react";
 import { Link } from "react-router-dom";
+import { menuData } from "../../constants/nav-constants";
 
 import ThemeToggler from "../ThemeToggler/ThemeToggler";
-import { menuData } from "../../constants/nav-constants";
 import Login from "../Login/Login";
 import AppLogo from "../AppLogo";
 
@@ -83,12 +83,13 @@ const Header = () => {
           <div className="mt-7 flex items-center gap-6 xl:mt-0">
             <ThemeToggler />
 
-            <Link
-              href="https://github.com/NextJSTemplates/solid-nextjs"
+            <NextLink
+              isExternal
+              href="https://github.com/ganeshdanuri/mirai"
               className="text-regular font-medium text-waterloo hover:text-primary"
             >
               GitHub Repo 🌟
-            </Link>
+            </NextLink>
 
             <Button onPress={onOpen} color="primary">
               Login

@@ -1,13 +1,18 @@
-import { useState } from "react";
 import { Image } from "@nextui-org/image";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
 const Hero = () => {
-  const [email, setEmail] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = (data) => {
+    console.log(data);
+    navigate("resume");
   };
 
   return (
@@ -32,25 +37,34 @@ const Hero = () => {
               </p>
 
               <div className="mt-10">
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit(onSubmit)}>
                   <div className="flex flex-wrap gap-5">
-                    <input
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      type="text"
-                      placeholder="Enter your email"
-                      className="rounded-full border border-stroke px-8 py-2.5 shadow-solid-2 focus:border-primary focus:outline-none dark:border-strokedark dark:bg-black dark:shadow-none dark:focus:border-primary"
-                    />
+                    <div className="flex flex-col">
+                      <input
+                        {...register("reply_to", {
+                          required: true,
+                          pattern: /^\S+@\S+$/i,
+                        })}
+                        type="text"
+                        placeholder="Your email address"
+                        className="h-12 rounded-full border border-stroke px-6 py-2.5 shadow-solid-2 focus:border-primary focus:outline-none dark:border-strokedark dark:bg-black dark:shadow-none dark:focus:border-primary"
+                      />
+                      {errors.reply_to && (
+                        <span className="text-red-500 ml-3">
+                          Please enter a valid email address
+                        </span>
+                      )}
+                    </div>
+
                     <button
-                      onClick={() => navigate("/resume")}
-                      aria-label="get started button"
-                      className="flex rounded-full bg-black px-7.5 py-2.5 text-white duration-300 ease-in-out hover:bg-blackho dark:bg-btndark dark:hover:bg-blackho"
+                      type="submit"
+                      aria-label="send message button"
+                      className="h-12 flex rounded-full bg-black px-7.5 py-2.5 text-white duration-300 ease-in-out hover:bg-blackho dark:bg-btndark dark:hover:bg-blackho"
                     >
                       Get Started
                     </button>
                   </div>
                 </form>
-
                 <p className="mt-5 text-black dark:text-white">
                   Try Our Free Forever Resume Builder - No Credit Card Needed!
                 </p>
@@ -92,43 +106,41 @@ const Hero = () => {
             </div>
           </div>
         </div>
-        <section className="bg-gray-100 dark:bg-gray-800 lg:h-[30%] flex flex-wrap items-center p-5">
-          <div className="mx-auto max-w-c-1390 px-4 md:px-8 2xl:px-0">
-            <div className="text-center">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                {/* Feature 1 */}
-                <div className="bg-white dark:bg-gray-900 shadow-md rounded-lg p-6">
-                  <h3 className="text-xl font-semibold text-black dark:text-white mb-4">
-                    ATS-Optimized Resumes
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-300">
-                    Create resumes that are optimized for Applicant Tracking
-                    Systems (ATS), ensuring your resume gets noticed by
-                    recruiters.
-                  </p>
-                </div>
+        <section className="bg-gray-100 dark:bg-gray-800 lg:h-[30%] flex flex-col items-center justify-center p-5">
+          <div className="container mx-auto max-w-screen-xl px-4 md:px-8">
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {/* Feature 1 */}
+              <div className="bg-white dark:bg-gray-900 shadow-md rounded-lg p-6 text-center">
+                <h3 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">
+                  ATS-Optimized Resumes
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300">
+                  Create resumes that are optimized for Applicant Tracking
+                  Systems (ATS), ensuring your resume gets noticed by
+                  recruiters.
+                </p>
+              </div>
 
-                {/* Feature 2 */}
-                <div className="bg-white dark:bg-gray-900 shadow-md rounded-lg p-6">
-                  <h3 className="text-xl font-semibold text-black dark:text-white mb-4">
-                    Easy-to-Use Interface
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-300">
-                    Our intuitive interface makes it simple to build and
-                    customize your resume with no technical skills required.
-                  </p>
-                </div>
+              {/* Feature 2 */}
+              <div className="bg-white dark:bg-gray-900 shadow-md rounded-lg p-6 text-center">
+                <h3 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">
+                  Easy-to-Use Interface
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300">
+                  Our intuitive interface makes it simple to build and customize
+                  your resume with no technical skills required.
+                </p>
+              </div>
 
-                {/* Feature 3 */}
-                <div className="bg-white dark:bg-gray-900 shadow-md rounded-lg p-6">
-                  <h3 className="text-xl font-semibold text-black dark:text-white mb-4">
-                    Free Forever
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-300">
-                    Enjoy unlimited access to our resume builder without any
-                    subscription fees or credit card requirements.
-                  </p>
-                </div>
+              {/* Feature 3 */}
+              <div className="bg-white dark:bg-gray-900 shadow-md rounded-lg p-6 text-center">
+                <h3 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">
+                  Free Forever
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300">
+                  Enjoy unlimited access to our resume builder without any
+                  subscription fees or credit card requirements.
+                </p>
               </div>
             </div>
           </div>

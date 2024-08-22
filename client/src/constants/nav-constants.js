@@ -5,12 +5,12 @@ export const menuData = [
     newTab: false,
     path: "/",
   },
-  {
-    id: 2,
-    title: "Features",
-    newTab: false,
-    path: "/#features",
-  },
+  // {
+  //   id: 2,
+  //   title: "Features",
+  //   newTab: false,
+  //   path: "/#features",
+  // },
   {
     id: 4,
     title: "Support",
