@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { tabDetails } from "../../constants/data-constants";
-import { Button } from "@nextui-org/react";
 import { v4 as uuidv4 } from "uuid";
 
 import DetailsForm from "./DetailsForm";
@@ -9,6 +8,7 @@ import AppDropdown from "./Dropdown";
 
 import "./Resume.scss";
 import { ResumeDisplay } from "./ResumeMaker";
+import { Button } from "../ui/button";
 
 const DetailsFooter = ({ activeTabIndex, setActiveTabIndex }) => {
   const handleNext = () => {

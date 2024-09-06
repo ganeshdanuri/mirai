@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
-import { Image } from "@nextui-org/image";
 
 import AppLogo from "../AppLogo";
 import emailjs from "@emailjs/browser";
+import { Button } from "@nextui-org/react";
 
 const SupportPage = () => {
   const {
@@ -89,7 +89,7 @@ const SupportPage = () => {
                     <button
                       type="submit"
                       aria-label="send message button"
-                      className="flex rounded-full bg-black px-7.5 py-2.5 text-white duration-300 ease-in-out hover:bg-blackho dark:bg-btndark dark:hover:bg-blackho"
+                      className="flex rounded-md bg-black px-7.5 py-2.5 text-white duration-300 ease-in-out hover:bg-blackho dark:bg-btndark dark:hover:bg-blackho"
                     >
                       Send Message
                     </button>
@@ -104,7 +104,7 @@ const SupportPage = () => {
 
             <div className="animate_right hidden md:w-1/2 lg:block">
               <div className="relative 2xl:-mr-7.5">
-                <Image
+                <img
                   src="/images/support/collaboration.svg"
                   alt="collaboration illustration"
                   width={800}
