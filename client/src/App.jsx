@@ -1,11 +1,11 @@
-import ErrorPage from "./components/Error/Error";
 import ResumeWrapper from "./components/ResumeWrapper/ResumeWrapper";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
+import ErrorPage from "./components/Error";
+import Home from "./components/Home";
+import SupportPage from "./components/Support";
+
 import "./App.css";
-import Home from "./components/Home/Home";
-import SupportPage from "./components/Support/Support";
-import { Button } from "./components/ui/button";
 
 const router = createBrowserRouter([
   {

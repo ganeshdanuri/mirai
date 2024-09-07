@@ -11,12 +11,14 @@ import {
 } from "@react-pdf/renderer";
 
 import ArialRegular from "/fonts/arial/ARIAL.TTF?url";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   getArrayOfFieldsData,
   getArrayOfProjectsData,
   getData,
 } from "../../utils/app-utils";
+
+import { v4 as uuidv4 } from "uuid";
 
 Font.register({
   family: "Arial",
@@ -180,7 +182,7 @@ export const ResumeMaker = ({ userData, originalData }) => {
         <View style={styles.section}>
           {finalWorkDetails?.map((eachDetail, i) => {
             return (
-              <>
+              <React.Fragment key={uuidv4()}>
                 <CommonSection
                   title={i === 0 ? "PROFESSIONAL EXPERIENCE" : null}
                   dates={eachDetail.dates}
@@ -214,7 +216,7 @@ export const ResumeMaker = ({ userData, originalData }) => {
                     </Text>
                   </View>
                 </View>
-              </>
+              </React.Fragment>
             );
           })}
         </View>

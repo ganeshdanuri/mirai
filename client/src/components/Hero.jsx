@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { ArrowRight } from "lucide-react";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+import { Input } from "@/ui/input";
+import { Button } from "@/ui/button";
 
-import FeatureCards from "../Features";
+import FeatureCards from "./Features";
 
 const Hero = () => {
   const {

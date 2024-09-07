@@ -7,18 +7,20 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
-import { Button } from "../ui/button";
-
-import AppLogo from "../AppLogo";
+} from "@/ui/dialog";
+import { Button } from "@/ui/button";
+import AppLogo from "./AppLogo";
 
 const menuData = [
   { title: "Home", path: "/" },
-  { title: "Templates", path: "/templates" },
-  { title: "Support", path: "/support" },
+  // { title: "Templates", path: "templates" },
+  { title: "Support", path: "support" },
 ];
 
-const Header = () => {
+const Header = ({ templatesRef, supportPageRef }) => {
+  const handleScrollToSection = (ref) => {
+    ref.current.scrollIntoView({ behavior: "smooth" });
+  };
   return (
     <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-16 md:h-20 items-center justify-between pl-5 pr-5">
@@ -27,13 +29,18 @@ const Header = () => {
         </div>
         <nav className="hidden md:flex items-center space-x-6">
           {menuData.map((item, index) => (
-            <Link
+            <a
               key={index}
-              to={item.path}
+              href={`#${item.path}`}
+              onClick={() =>
+                handleScrollToSection(
+                  item.path === "templates" ? templatesRef : supportPageRef
+                )
+              }
               className="text-sm lg:text-base font-medium text-foreground/60 hover:text-foreground transition-colors duration-200"
             >
               {item.title}
-            </Link>
+            </a>
           ))}
         </nav>
         <div className="flex items-center space-x-2 md:space-x-4">

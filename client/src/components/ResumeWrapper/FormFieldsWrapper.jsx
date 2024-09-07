@@ -1,7 +1,16 @@
-import { Button, Divider, Tooltip } from "@nextui-org/react";
+import { Divider } from "@nextui-org/react";
 import { inputStyle } from "../../constants/data-constants";
 import { handleGenerate } from "../../utils/app-utils";
 import { useState } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/ui/tooltip";
+import { useToast } from "@/hooks/use-toast";
+import { ToastAction } from "@/ui/toast";
+import { Button } from "@/ui/button";
 
 /* eslint-disable react/prop-types */
 const FormInput = ({
@@ -13,6 +22,7 @@ const FormInput = ({
 }) => {
   const { id, label, type, AI, info } = eachInfo;
   const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
 
   return (
     <div
@@ -25,13 +35,22 @@ const FormInput = ({
         >
           <span>{label}</span>
           {info && (
-            <Tooltip content={info}>
-              <img
-                src="/images/shape/info.svg"
-                width={"15px"}
-                className="ml-1"
-              />
-            </Tooltip>
+            <>
+              <TooltipProvider delayDuration={300}>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <img
+                      src="/images/shape/info.svg"
+                      width={"15px"}
+                      className="ml-1"
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{info}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </>
           )}
         </label>
         {type === "textArea" ? (
@@ -43,48 +62,49 @@ const FormInput = ({
             {AI && (
               <div className="flex">
                 <Button
-                  onClick={() =>
-                    handleGenerate(
-                      id,
-                      activeTabInfo.id,
-                      getValues(id),
-                      setValue,
-                      setLoading
-                    )
-                  }
-                  isLoading={loading}
-                  spinner={
-                    <svg
-                      className="animate-spin h-5 w-5 text-current"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      />
-                      <path
-                        className="opacity-75"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        fill="currentColor"
-                      />
-                    </svg>
-                  }
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (!getValues(id)) {
+                      console.log("j");
+                      toast({
+                        title: "Scheduled: Catch up ",
+                        description: "Friday, February 10, 2023 at 5:57 PM",
+                        action: (
+                          <ToastAction altText="Goto schedule to undo">
+                            Undo
+                          </ToastAction>
+                        ),
+                      });
+                    } else {
+                      handleGenerate(
+                        id,
+                        activeTabInfo.id,
+                        getValues(id),
+                        setValue,
+                        setLoading
+                      );
+                    }
+                  }}
+                  variant="secondary"
+                  type
                 >
                   Generate with AI
                 </Button>
-                <Tooltip content="Please add the description and click on generate AI">
-                  <img
-                    src="/images/shape/info.svg"
-                    width={"15px"}
-                    className="ml-1"
-                  />
-                </Tooltip>
+
+                <TooltipProvider delayDuration={300}>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <img
+                        src="/images/shape/info.svg"
+                        width={"15px"}
+                        className="ml-1"
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Please add the description and click on generate AI</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
             )}
           </>

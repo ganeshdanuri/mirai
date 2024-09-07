@@ -8,7 +8,7 @@ import AppDropdown from "./Dropdown";
 
 import "./Resume.scss";
 import { ResumeDisplay } from "./ResumeMaker";
-import { Button } from "../ui/button";
+import { Button } from "@/ui/button";
 
 const DetailsFooter = ({ activeTabIndex, setActiveTabIndex }) => {
   const handleNext = () => {

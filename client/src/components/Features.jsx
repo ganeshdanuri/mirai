@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/ui/card";
 import { CheckCircle } from "lucide-react";
 
 const FeatureCards = () => {
