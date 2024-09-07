@@ -1,20 +1,63 @@
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import emailjs from "@emailjs/browser";
+import { Github, Twitter, Linkedin, Home } from "lucide-react";
 
 import AppLogo from "../AppLogo";
-import emailjs from "@emailjs/browser";
-import { Button } from "@nextui-org/react";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "../ui/card";
+import { Button } from "../ui/button";
+import { Textarea } from "../ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import { Input } from "../ui/input";
+import { useNavigate } from "react-router-dom";
+
+const formSchema = z.object({
+  reply_to: z.string().email({ message: "Please enter a valid email address" }),
+  message: z.string().min(1, { message: "Please enter a message" }),
+});
+
+const SocialLink = ({ href, icon: Icon, children }) => (
+  <a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="flex items-center space-x-2 text-blue-500 hover:underline"
+  >
+    <Icon className="h-5 w-5" />
+    <span>{children}</span>
+  </a>
+);
 
 const SupportPage = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-  // const navigate = useNavigate();
+  const { toast } = useToast();
+  const navigate = useNavigate();
 
-  const onSubmit = (data) => {
-    emailjs
-      .send(
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      reply_to: "",
+      message: "",
+    },
+  });
+
+  const onSubmit = async (data) => {
+    try {
+      await emailjs.send(
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
         import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
         data,
@@ -22,161 +65,161 @@ const SupportPage = () => {
           publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
           from_name: "Ganesh Danuri",
         }
-      )
-      .then(
-        (result) => {
-          console.log(result.text);
-          alert("Message sent successfully!");
-        },
-        (error) => {
-          console.log(error.text);
-          alert("Failed to send message. Please try again.");
-        }
       );
+      toast({
+        title: "Message sent successfully!",
+        description: "I'll get back to you as soon as possible.",
+      });
+      form.reset();
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Failed to send message",
+        description: "Please try again later.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const backToHome = () => {
+    navigate("/");
   };
 
   return (
-    <div className="flex w-full h-full relative">
-      <section className="overflow-hidden md:pt-40 w-[50%]">
-        <div className="absolute top-5 left-9">
-          <AppLogo />
-        </div>
-        <div className="mx-auto max-w-c-1390 px-4 md:px-8 2xl:px-0">
-          <div className="flex justify-center items-center">
-            <div className="w-full">
-              <h4 className="mb-4.5 text-lg font-medium text-black dark:text-white">
-                Let's Connect!
-              </h4>
-              <h1 className="mb-5 pr-16 text-3xl font-bold text-black dark:text-white xl:text-hero">
-                Reach Out for Collaborations or Questions
-              </h1>
-              <p>
-                Whether you have a project idea, a question about my work, or
-                just want to say hello, I'm always excited to hear from fellow
-                developers and tech enthusiasts.
-              </p>
+    <div className="flex flex-col min-h-screen bg-background">
+      <header className="sticky top-0 z-10 bg-background p-4 flex justify-between items-center shadow-md">
+        <AppLogo className="w-24 md:w-32" />
+        <Button
+          variant="outline"
+          size="sm"
+          className="flex items-center"
+          onClick={backToHome}
+        >
+          <Home className="mr-2 h-4 w-4" />
+          Back to Home
+        </Button>
+      </header>
 
-              <div className="mt-10">
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <div className="flex flex-col gap-5">
-                    <input
-                      {...register("reply_to", {
-                        required: true,
-                        pattern: /^\S+@\S+$/i,
-                      })}
-                      type="text"
-                      placeholder="Your email address"
-                      className="rounded-full border border-stroke px-6 py-2.5 shadow-solid-2 focus:border-primary focus:outline-none dark:border-strokedark dark:bg-black dark:shadow-none dark:focus:border-primary"
-                    />
-                    {errors.reply_to && (
-                      <span className="text-red-500 ml-3">
-                        Please enter a valid email address
-                      </span>
-                    )}
+      <div className="flex flex-col lg:flex-row flex-grow">
+        <section className="w-full lg:w-1/2 p-4 sm:p-6 md:p-8 lg:p-12 flex flex-col justify-center">
+          <div className="w-full max-w-md mx-auto">
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3 sm:mb-4 text-center">
+              Let's Connect!
+            </h1>
+            <p className="text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8 text-center">
+              Whether you have a project idea, a question about my work, or just
+              want to say hello, I'm always excited to hear from fellow
+              developers and tech enthusiasts.
+            </p>
 
-                    <textarea
-                      {...register("message", { required: true })}
-                      type="text"
-                      placeholder="Your message"
-                      className="rounded-md border border-stroke px-6 py-2.5 shadow-solid-2 focus:border-primary focus:outline-none dark:border-strokedark dark:bg-black dark:shadow-none dark:focus:border-primary"
-                    />
-                    {errors.message && (
-                      <span className="text-red-500 ml-3">
-                        Please enter a message
-                      </span>
-                    )}
-
-                    <button
-                      type="submit"
-                      aria-label="send message button"
-                      className="flex rounded-md bg-black px-7.5 py-2.5 text-white duration-300 ease-in-out hover:bg-blackho dark:bg-btndark dark:hover:bg-blackho"
-                    >
-                      Send Message
-                    </button>
-                  </div>
-                </form>
-
-                <p className="mt-5 text-black dark:text-white">
-                  I typically respond within 24-48 hours.
-                </p>
-              </div>
-            </div>
-
-            <div className="animate_right hidden md:w-1/2 lg:block">
-              <div className="relative 2xl:-mr-7.5">
-                <img
-                  src="/images/support/collaboration.svg"
-                  alt="collaboration illustration"
-                  width={800}
-                  height={600}
-                  className="absolute -left-11.5 top-0"
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-4"
+              >
+                <FormField
+                  control={form.control}
+                  name="reply_to"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Your email address" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
-            </div>
+                <FormField
+                  control={form.control}
+                  name="message"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Message</FormLabel>
+                      <FormControl>
+                        <Textarea placeholder="Your message" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button type="submit" className="w-full">
+                  Send Message
+                </Button>
+              </form>
+            </Form>
+
+            <p className="mt-4 sm:mt-6 text-xs sm:text-sm text-muted-foreground text-center">
+              I typically respond within 24-48 hours.
+            </p>
           </div>
-        </div>
-      </section>
-      <section className="bg-gray-100 dark:bg-gray-800 py-10 w-[50%] h-full">
-        <div className="mx-auto max-w-c-1390 px-4 md:px-8 2xl:px-0">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold text-black dark:text-white mb-8">
+        </section>
+
+        <section className="w-full lg:w-1/2 bg-muted p-4 sm:p-6 md:p-8 lg:p-12 flex flex-col justify-center">
+          <div className="w-full max-w-md mx-auto">
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-6 sm:mb-8 text-center">
               Connect With Me
             </h2>
-            <div className="flex flex-col justify-between">
-              <div className="bg-white dark:bg-gray-900 shadow-md rounded-lg p-6 m-10">
-                <h3 className="text-xl font-semibold text-black dark:text-white mb-4">
-                  GitHub
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Check out my open-source projects and contributions.
-                </p>
-                <a
-                  href="https://github.com/ganeshdanuri/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500 hover:underline"
-                >
-                  github.com/ganeshdanuri
-                </a>
-              </div>
+            <div className="grid gap-4 sm:gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg sm:text-xl text-center">
+                    GitHub
+                  </CardTitle>
+                  <CardDescription className="text-sm sm:text-base text-center">
+                    Check out my open-source projects and contributions.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="flex justify-center">
+                  <SocialLink
+                    href="https://github.com/ganeshdanuri/"
+                    icon={Github}
+                  >
+                    <span className="text-sm sm:text-base">
+                      github.com/ganeshdanuri
+                    </span>
+                  </SocialLink>
+                </CardContent>
+              </Card>
 
-              <div className="bg-white dark:bg-gray-900 shadow-md rounded-lg p-6 m-10">
-                <h3 className="text-xl font-semibold text-black dark:text-white mb-4">
-                  Twitter
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Follow me for tech insights and project updates.
-                </p>
-                <a
-                  href="https://x.com/ganeshdanuri1"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500 hover:underline"
-                >
-                  @ganeshdanuri1
-                </a>
-              </div>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg sm:text-xl text-center">
+                    Twitter
+                  </CardTitle>
+                  <CardDescription className="text-sm sm:text-base text-center">
+                    Follow me for tech insights and project updates.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="flex justify-center">
+                  <SocialLink href="https://x.com/ganeshdanuri1" icon={Twitter}>
+                    <span className="text-sm sm:text-base">@ganeshdanuri1</span>
+                  </SocialLink>
+                </CardContent>
+              </Card>
 
-              <div className="bg-white dark:bg-gray-900 shadow-md rounded-lg p-6 m-5">
-                <h3 className="text-xl font-semibold text-black dark:text-white mb-4">
-                  Linkedin
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Get a glimpse of my coding journey and daily dev life.
-                </p>
-                <a
-                  href="https://www.linkedin.com/in/ganeshdanuri/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500 hover:underline"
-                >
-                  @ganeshdanuri
-                </a>
-              </div>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg sm:text-xl text-center">
+                    LinkedIn
+                  </CardTitle>
+                  <CardDescription className="text-sm sm:text-base text-center">
+                    Connect with me professionally.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="flex justify-center">
+                  <SocialLink
+                    href="https://www.linkedin.com/in/ganeshdanuri/"
+                    icon={Linkedin}
+                  >
+                    <span className="text-sm sm:text-base">@ganeshdanuri</span>
+                  </SocialLink>
+                </CardContent>
+              </Card>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </div>
   );
 };
