@@ -55,7 +55,7 @@ const Hero = () => {
                   )}
                 </div>
                 <Button type="submit" className="w-full sm:w-auto">
-                  Get Started
+                  Create Resume
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
