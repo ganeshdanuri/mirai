@@ -1,0 +1,18 @@
+.logo-first-word {
+  color: rgb(42, 44, 49);
+  font-size: 28px;
+  font-weight: 600;
+  position: relative;
+  letter-spacing: -2px;
+  top: 5px;
+}
+
+.logo-second-word {
+  color: rgb(96, 124, 247);
+  font-size: 28px;
+  font-weight: 600;
+  position: relative;
+  letter-spacing: -2px;
+  top: 5px;
+  text-decoration: underline;
+}
