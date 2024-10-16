@@ -31,7 +31,7 @@ const Hero = () => {
             </h1>
             <p className="text-xl mb-8 text-gray-600 dark:text-gray-300">
               Land your dream job faster with our polished and ATS-friendly
-              resume builder. 
+              resume builder. No  card required!
             </p>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="flex flex-col sm:flex-row gap-4">
