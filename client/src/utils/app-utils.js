@@ -81,7 +81,7 @@ const generatePrompt = (value, key) => {
   * **Job description focus:** ${key}
   * **Candidate data:** ${value}
   **Output:**
-  Return an array of strings, where each string represents a compelling resume bullet point directly addressing the job description focus based on the candidate data.`;
+  Return an exact array of strings, where each string is a concise and compelling resume bullet point addressing the job description focus based on the candidate data. Do not include any additional text, explanations, or formatting—only return the raw array of strings.`;
   return prompt;
 };
 
