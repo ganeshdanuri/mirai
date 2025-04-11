@@ -1,4 +1,4 @@
-# ATS Resume Maker
+# ATS (Applicant Tracking Systems) Resume Maker
 
 This is a React application built with Vite that helps you create ATS-friendly resumes.
 
