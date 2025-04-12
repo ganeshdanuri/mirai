@@ -1,6 +1,6 @@
-import ResumeWrapper from "./components/ResumeWrapper/ResumeWrapper";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
+import ResumeBuilder from "./components/ResumeWrapper/ResumeBuilder";
 import ErrorPage from "./components/Error";
 import Home from "./components/Home";
 import SupportPage from "./components/Support";
@@ -15,7 +15,7 @@ const router = createBrowserRouter([
   },
   {
     path: "resume",
-    element: <ResumeWrapper />,
+    element: <ResumeBuilder />,
   },
   {
     path: "support",
