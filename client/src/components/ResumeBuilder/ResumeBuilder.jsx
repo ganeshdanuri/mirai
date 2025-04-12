@@ -3,6 +3,11 @@ import ResumeForm from "./ResumeForm";
 import ResumePreview from "./ResumePreview";
 
 const ResumeBuilder = () => {
+  // State to track if we're in mobile view
+  const [isMobileView, setIsMobileView] = useState(false);
+  // State to toggle between form and preview in mobile view
+  const [showPreview, setShowPreview] = useState(false);
+
   // Initialize state with a more structured approach for multiple entries
   const [userData, setUserData] = useState({
     // Personal information
@@ -49,6 +54,22 @@ const ResumeBuilder = () => {
       otherSkills: "",
     },
   });
+
+  // Effect to check screen size and set the view mode
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobileView(window.innerWidth < 768);
+    };
+
+    // Initial check
+    checkScreenSize();
+
+    // Add event listener for resize
+    window.addEventListener("resize", checkScreenSize);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
 
   // Load saved draft from localStorage
   useEffect(() => {
@@ -256,10 +277,38 @@ const ResumeBuilder = () => {
     }
   };
 
+  // Toggle between form and preview in mobile view
+  const toggleView = () => {
+    setShowPreview(!showPreview);
+  };
+
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex flex-col md:flex-row h-screen bg-gray-50">
+      {/* Mobile View Toggle Button */}
+      {isMobileView && (
+        <div className="bg-white p-3 flex justify-center border-b border-gray-200">
+          <button
+            onClick={toggleView}
+            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors shadow-sm"
+          >
+            {showPreview ? "Edit Resume" : "Preview Resume"}
+          </button>
+        </div>
+      )}
+
       {/* Left panel - Form */}
-      <div className="w-1/2 h-full overflow-auto border-r border-gray-200">
+      <div
+        className={`
+          ${
+            isMobileView
+              ? showPreview
+                ? "hidden"
+                : "w-full h-[calc(100vh-56px)]"
+              : "w-full md:w-1/2 h-full"
+          } 
+          overflow-auto border-r border-gray-200
+        `}
+      >
         <ResumeForm
           userData={userData}
           updateBasicField={updateBasicField}
@@ -267,12 +316,28 @@ const ResumeBuilder = () => {
           addNewEntry={addNewEntry}
           removeEntry={removeEntry}
           saveDraft={saveDraft}
+          isMobileView={isMobileView}
         />
       </div>
 
       {/* Right panel - Preview */}
-      <div className="w-1/2 h-full overflow-auto">
-        <ResumePreview userData={userData} />
+      <div
+        className={`
+          ${
+            isMobileView
+              ? showPreview
+                ? "w-full h-[calc(100vh-56px)]"
+                : "hidden"
+              : "w-full md:w-1/2 h-full"
+          } 
+          overflow-auto
+        `}
+      >
+        <ResumePreview
+          userData={userData}
+          isMobileView={isMobileView}
+          toggleView={isMobileView ? toggleView : null}
+        />
       </div>
     </div>
   );

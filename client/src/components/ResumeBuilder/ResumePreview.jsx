@@ -308,14 +308,14 @@ const ResumePDF = memo(({ userData }) => {
 // Memo-wrapped Education item component
 const EducationItem = memo(({ edu }) => (
   <div className="mb-4">
-    <div className="flex justify-between items-start">
+    <div className="flex flex-col sm:flex-row justify-between items-start">
       <div>
         <h4 className="font-semibold text-gray-800">
           {edu?.collegeName || ""}
         </h4>
         <p className="text-sm text-gray-600 italic">{edu?.course || ""}</p>
       </div>
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-gray-500 mt-1 sm:mt-0">
         {edu?.eduFrom ? `${edu.eduFrom} - ${edu.eduTo || "Present"}` : ""}
       </p>
     </div>
@@ -325,12 +325,12 @@ const EducationItem = memo(({ edu }) => (
 // Memo-wrapped Experience item component
 const ExperienceItem = memo(({ exp }) => (
   <div className="mb-6">
-    <div className="flex justify-between items-start">
+    <div className="flex flex-col sm:flex-row justify-between items-start">
       <div>
         <h4 className="font-semibold text-gray-800">{exp?.jobTitle || ""}</h4>
         <p className="text-sm text-gray-600 italic">{exp?.companyName || ""}</p>
       </div>
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-gray-500 mt-1 sm:mt-0">
         {exp?.workFrom ? `${exp.workFrom} - ${exp.workTo || "Present"}` : ""}
       </p>
     </div>
@@ -349,7 +349,7 @@ const ExperienceItem = memo(({ exp }) => (
 // Memo-wrapped Project item component
 const ProjectItem = memo(({ project }) => (
   <div className="mb-5">
-    <div className="flex justify-between items-start">
+    <div className="flex flex-col sm:flex-row justify-between items-start">
       <div>
         <h4 className="font-semibold text-gray-800">
           {project?.projectName || ""}
@@ -433,21 +433,21 @@ const ResumePreview = ({ userData }) => {
     return (
       <div className="space-y-2 text-sm">
         {frontendSkills && (
-          <div className="flex">
+          <div className="flex flex-col sm:flex-row">
             <span className="font-medium w-20">Frontend:</span>
-            <span className="text-gray-700">{frontendSkills}</span>
+            <span className="text-gray-700 sm:pl-0 pl-4">{frontendSkills}</span>
           </div>
         )}
         {backendSkills && (
-          <div className="flex">
+          <div className="flex flex-col sm:flex-row">
             <span className="font-medium w-20">Backend:</span>
-            <span className="text-gray-700">{backendSkills}</span>
+            <span className="text-gray-700 sm:pl-0 pl-4">{backendSkills}</span>
           </div>
         )}
         {otherSkills && (
-          <div className="flex">
+          <div className="flex flex-col sm:flex-row">
             <span className="font-medium w-20">Other:</span>
-            <span className="text-gray-700">{otherSkills}</span>
+            <span className="text-gray-700 sm:pl-0 pl-4">{otherSkills}</span>
           </div>
         )}
       </div>
@@ -457,15 +457,15 @@ const ResumePreview = ({ userData }) => {
   return (
     <div className="w-full h-full flex flex-col bg-gray-50">
       {/* Header with actions */}
-      <div className="bg-white border-b border-gray-200 py-4 px-6 sticky top-0 z-10">
-        <div className="flex justify-between items-center">
-          <h3 className="text-lg font-medium text-gray-800 flex items-center gap-2">
+      <div className="bg-white border-b border-gray-200 py-3 px-4 sm:px-6 sticky top-0 z-10">
+        <div className="flex flex-col sm:flex-row justify-between items-center">
+          <h3 className="text-lg font-medium text-gray-800 flex items-center gap-2 mb-3 sm:mb-0">
             <Eye size={18} className="text-gray-500" />
             Preview
           </h3>
           <button
             onClick={handleDownload}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors shadow-sm"
+            className="flex w-full sm:w-auto items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors shadow-sm"
           >
             <Download size={16} />
             <span>Download PDF</span>
@@ -475,13 +475,13 @@ const ResumePreview = ({ userData }) => {
 
       {/* Resume Preview - HTML Version (More efficient than PDF for preview) */}
       <div className="flex-grow overflow-auto">
-        <div className="max-w-3xl mx-auto my-8 bg-white shadow-md rounded-lg p-8 print:shadow-none">
+        <div className="max-w-3xl mx-auto my-4 sm:my-8 bg-white shadow-md rounded-lg p-4 sm:p-8 print:shadow-none">
           {/* Header/Contact Information */}
-          <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+          <div className="text-center mb-6 sm:mb-8">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
               {safeUserData.personal?.name || "Your Name"}
             </h1>
-            <p className="text-sm text-gray-600">
+            <p className="text-xs sm:text-sm text-gray-600 flex flex-wrap justify-center">
               {safeUserData.personal?.email && (
                 <span className="inline-block mx-1">
                   {safeUserData.personal.email}

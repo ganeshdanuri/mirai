@@ -1,7 +1,14 @@
 import { useState } from "react";
 import * as Tabs from "@radix-ui/react-tabs";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
-import { Save, ChevronRight, ChevronLeft, Plus, Trash2 } from "lucide-react";
+import {
+  Save,
+  ChevronRight,
+  ChevronLeft,
+  Plus,
+  Trash2,
+  Eye,
+} from "lucide-react";
 import AIAssistantButton from "./AIAssistantButton";
 import AppLogo from "../AppLogo";
 
@@ -273,6 +280,7 @@ const ResumeForm = ({
   addNewEntry,
   removeEntry,
   saveDraft,
+  isMobileView,
 }) => {
   const [sections] = useState(defaultSections);
   const [selectedTab, setSelectedTab] = useState("personal");
@@ -298,38 +306,46 @@ const ResumeForm = ({
   };
 
   return (
-    <div className="p-6">
-      <AppLogo />
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">Build Your Resume</h2>
-        <p className="text-gray-600">
+    <div className="p-4 md:p-6">
+      <div className="flex justify-between items-center">
+        <AppLogo />
+        {/* Show logo in smaller size on mobile */}
+        <div className="md:hidden text-sm text-gray-500">Resume Builder</div>
+      </div>
+      <div className="mb-4 md:mb-6 mt-3">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-900">
+          Build Your Resume
+        </h2>
+        <p className="text-sm md:text-base text-gray-600">
           Fill in your details and see your ATS-optimized resume preview in
           real-time
         </p>
       </div>
 
       <Tabs.Root value={selectedTab} onValueChange={setSelectedTab}>
-        <Tabs.List
-          className="flex border-b border-gray-200 mb-6 overflow-x-auto"
-          aria-label="Resume Sections"
-        >
-          {sections.map((section) => (
-            <Tabs.Trigger
-              key={section.id}
-              value={section.id}
-              className={`px-4 py-2 text-sm font-medium focus:outline-none whitespace-nowrap
-                ${
-                  selectedTab === section.id
-                    ? "text-blue-600 border-b-2 border-blue-600"
-                    : "text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
-            >
-              {section.label}
-            </Tabs.Trigger>
-          ))}
-        </Tabs.List>
+        <div className="overflow-x-auto">
+          <Tabs.List
+            className="flex border-b border-gray-200 mb-4 md:mb-6 min-w-max"
+            aria-label="Resume Sections"
+          >
+            {sections.map((section) => (
+              <Tabs.Trigger
+                key={section.id}
+                value={section.id}
+                className={`px-3 md:px-4 py-2 text-xs md:text-sm font-medium focus:outline-none whitespace-nowrap
+                  ${
+                    selectedTab === section.id
+                      ? "text-blue-600 border-b-2 border-blue-600"
+                      : "text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  }`}
+              >
+                {section.label}
+              </Tabs.Trigger>
+            ))}
+          </Tabs.List>
+        </div>
 
-        <ScrollArea.Root className="h-[calc(100vh-240px)] w-full overflow-hidden">
+        <ScrollArea.Root className="h-[calc(100vh-200px)] md:h-[calc(100vh-240px)] w-full overflow-hidden">
           <ScrollArea.Viewport className="h-full w-full rounded">
             {sections.map((section) => (
               <Tabs.Content
@@ -337,11 +353,11 @@ const ResumeForm = ({
                 value={section.id}
                 className="focus:outline-none"
               >
-                <div className="bg-white p-5 rounded-lg shadow-sm mb-4">
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">
+                <div className="bg-white p-4 md:p-5 rounded-lg shadow-sm mb-4">
+                  <h3 className="text-md md:text-lg font-medium text-gray-900 mb-2">
                     {section.label}
                   </h3>
-                  <p className="text-sm text-gray-500 mb-4">
+                  <p className="text-xs md:text-sm text-gray-500 mb-4">
                     {section.description}
                   </p>
 
@@ -380,12 +396,12 @@ const ResumeForm = ({
           </ScrollArea.Scrollbar>
         </ScrollArea.Root>
 
-        <div className="flex justify-between mt-6">
+        <div className="flex justify-between mt-4 md:mt-6">
           <button
             type="button"
             onClick={goToPrevTab}
             disabled={selectedTab === sections[0].id}
-            className={`inline-flex items-center px-3 py-2 border rounded-md text-sm font-medium
+            className={`inline-flex items-center px-2 md:px-3 py-1 md:py-2 border rounded-md text-xs md:text-sm font-medium
               ${
                 selectedTab === sections[0].id
                   ? "text-gray-400 bg-gray-100 cursor-not-allowed"
@@ -393,24 +409,24 @@ const ResumeForm = ({
               }`}
           >
             <ChevronLeft className="h-4 w-4 mr-1" />
-            Previous
+            Prev
           </button>
 
           <div className="space-x-2">
             <button
               type="button"
-              className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="inline-flex items-center px-2 md:px-3 py-1 md:py-2 border border-gray-300 shadow-sm text-xs md:text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               onClick={saveDraft}
             >
               <Save className="h-4 w-4 mr-1" />
-              Save Draft
+              Save
             </button>
 
             <button
               type="button"
               onClick={goToNextTab}
               disabled={selectedTab === sections[sections.length - 1].id}
-              className={`inline-flex items-center px-4 py-2 border rounded-md text-sm font-medium
+              className={`inline-flex items-center px-2 md:px-4 py-1 md:py-2 border rounded-md text-xs md:text-sm font-medium
                 ${
                   selectedTab === sections[sections.length - 1].id
                     ? "text-gray-400 bg-gray-100 cursor-not-allowed"
