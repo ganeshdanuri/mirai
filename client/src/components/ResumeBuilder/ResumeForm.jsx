@@ -3,6 +3,7 @@ import * as Tabs from "@radix-ui/react-tabs";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import { Save, ChevronRight, ChevronLeft, Plus, Trash2 } from "lucide-react";
 import AIAssistantButton from "./AIAssistantButton";
+import AppLogo from "../AppLogo";
 
 // Default sections for the resume
 const defaultSections = [
@@ -298,6 +299,7 @@ const ResumeForm = ({
 
   return (
     <div className="p-6">
+      <AppLogo />
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-gray-900">Build Your Resume</h2>
         <p className="text-gray-600">

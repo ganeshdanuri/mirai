@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import ResumeBuilder from "./components/ResumeWrapper/ResumeBuilder";
+import ResumeBuilder from "./components/ResumeBuilder/ResumeBuilder";
 import ErrorPage from "./components/Error";
 import Home from "./components/Home";
 import SupportPage from "./components/Support";
