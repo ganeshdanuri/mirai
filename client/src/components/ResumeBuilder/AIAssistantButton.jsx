@@ -12,65 +12,37 @@ const AIAssistantButton = ({ field, updateUserData }) => {
   const handleGenerate = async () => {
     setIsLoading(true);
     setError("");
-
     try {
       // Initialize Google GenAI
       const ai = new GoogleGenAI({
         apiKey: import.meta.env.VITE_API_KEY,
       });
 
-      // Construct prompt based on the field and user input
-      let prompt = `Generate content for the "${
-        field.label || field.id
-      }" section of a resume.`;
+      // Fixed role as developer, get experience from user input or use default
+      const role = "developer";
+      const experience = "3 years";
 
-      // Always include the default role and experience, whether user input exists or not
-      prompt += ` Considering the following role and experience: frontend engineer with 3 years.`;
-
-      // If user provides additional context, add it
-      if (userInput.trim()) {
-        prompt += ` Additional context: ${userInput}`;
-      }
-
-      prompt += ` Format the output as a list of concise bullet points, with each point starting with "•". Focus on achievements and quantifiable results where applicable. Do not include any additional information, styling, or markdown.`;
-
+      // Build prompt with clear sections
+      const prompt = buildPrompt({
+        field: field.label || field.id,
+        role,
+        experience,
+        additionalContext: userInput.trim(),
+      });
       console.log("Sending prompt:", prompt);
 
       // Call Gemini API
       const response = await ai.models.generateContent({
-        model: "gemini-2.0-flash",
+        model: "gemini-2.5-flash-lite-preview-06-17",
         contents: [{ parts: [{ text: prompt }] }],
       });
-
       console.log("API Response:", response);
 
-      // Extract text from the response
+      // Extract and process the generated content
       const generatedContent = response.candidates[0].content.parts[0].text;
       console.log("Raw generated content:", generatedContent);
 
-      // Check if content is already in bullet point format
-      const hasExistingBullets = generatedContent.includes("•");
-
-      // Process the content
-      let formattedContent;
-
-      if (hasExistingBullets) {
-        // Content already has bullets, just ensure proper formatting
-        formattedContent = generatedContent
-          .split("\n")
-          .map((line) => line.trim())
-          .filter((line) => line) // Remove empty lines
-          .join("\n");
-      } else {
-        // Content doesn't have bullets, add them
-        formattedContent = generatedContent
-          .split("\n")
-          .map((line) => line.trim())
-          .filter((line) => line) // Remove empty lines
-          .map((line) => (line.startsWith("•") ? line : `• ${line}`))
-          .join("\n");
-      }
-
+      const formattedContent = formatContent(generatedContent);
       console.log("Formatted content:", formattedContent);
 
       if (!formattedContent) {
@@ -87,6 +59,71 @@ const AIAssistantButton = ({ field, updateUserData }) => {
       setError("Failed to generate content. Please try again.");
       setIsLoading(false);
     }
+  };
+
+  // Helper function to build structured prompt
+  const buildPrompt = ({ field, role, experience, additionalContext }) => {
+    let prompt = `Generate content for the "${field}" section of a resume.
+  ROLE INFORMATION:
+  - Position: ${role}
+  - Experience: ${experience}`;
+
+    if (additionalContext) {
+      prompt += `
+  ADDITIONAL CONTEXT:
+  ${additionalContext}`;
+    }
+
+    prompt += `
+  FORMATTING REQUIREMENTS:
+  - Format as bullet points starting with "•"
+  - Focus on achievements and quantifiable results
+  - Keep each point concise and impactful
+  - Use action verbs and specific metrics when possible
+  - No additional styling, markdown, or explanatory text
+  - Maximum 5-6 bullet points
+  
+  EXAMPLE FORMAT:
+  • Developed and deployed 15+ responsive web applications using React and TypeScript
+  • Improved website performance by 40% through code optimization and lazy loading
+  • Collaborated with cross-functional teams to deliver projects 20% ahead of schedule`;
+
+    return prompt;
+  };
+
+  // Helper function to format the generated content
+  const formatContent = (content) => {
+    if (!content || !content.trim()) {
+      return "";
+    }
+
+    // Check if content already has bullet points
+    const hasExistingBullets = content.includes("•");
+    let formattedContent;
+
+    if (hasExistingBullets) {
+      // Content already has bullets, clean up formatting
+      formattedContent = content
+        .split("\n")
+        .map((line) => line.trim())
+        .filter(
+          (line) => line && !line.match(/^(EXAMPLE|FORMAT|NOTE|REQUIREMENTS)/i)
+        ) // Remove instruction text
+        .filter((line) => line.startsWith("•")) // Keep only bullet points
+        .join("\n");
+    } else {
+      // Content doesn't have bullets, add them
+      formattedContent = content
+        .split("\n")
+        .map((line) => line.trim())
+        .filter(
+          (line) => line && !line.match(/^(EXAMPLE|FORMAT|NOTE|REQUIREMENTS)/i)
+        )
+        .map((line) => (line.startsWith("•") ? line : `• ${line}`))
+        .join("\n");
+    }
+
+    return formattedContent;
   };
 
   // Conditional rendering
