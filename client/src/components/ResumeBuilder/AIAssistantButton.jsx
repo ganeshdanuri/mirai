@@ -129,7 +129,7 @@ const AIAssistantButton = ({ field, updateUserData }) => {
   // Conditional rendering
   if (
     !["textarea", "text"].includes(field.type) ||
-    (!field.id.includes("Skills") && !field.id.includes("Description"))
+    (!field.id.includes("skills") && !field.id.includes("Description"))
   ) {
     return null;
   }
